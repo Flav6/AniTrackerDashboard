@@ -1,7 +1,6 @@
 "use client"
 
 import useSWR from "swr"
-import { AnimatePresence } from "framer-motion"
 import { AnimeCard } from "./anime-card"
 import { AnimeDetailPage } from "./anime-detail-page"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -98,15 +97,13 @@ export function AnimeGrid({ category, searchQuery }: AnimeGridProps) {
         ))}
       </div>
 
-      <AnimatePresence>
-        {selectedAnimeId && (
-          <AnimeDetailPage 
-            animeId={selectedAnimeId}
-            onClose={() => setSelectedAnimeId(null)}
-            onAnimeSelect={(id) => setSelectedAnimeId(id)}
-          />
-        )}
-      </AnimatePresence>
+      {selectedAnimeId && (
+        <AnimeDetailPage 
+          animeId={selectedAnimeId}
+          onClose={() => setSelectedAnimeId(null)}
+          onAnimeSelect={(id) => setSelectedAnimeId(id)}
+        />
+      )}
     </>
   )
 }

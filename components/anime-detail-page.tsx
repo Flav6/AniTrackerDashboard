@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import useSWR from "swr"
-import { motion, AnimatePresence } from "framer-motion"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -95,11 +94,25 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
   const staff = staffData?.data
   const recommendations = recommendationsData?.data
 
+  // Helper function to extract YouTube ID from embed URL
+  function extractYoutubeId(embedUrl: string | null | undefined): string | null {
+    if (!embedUrl) return null
+    // Match patterns like /embed/VIDEO_ID or /v/VIDEO_ID
+    const match = embedUrl.match(/(?:embed|v)\/([a-zA-Z0-9_-]+)/)
+    return match ? match[1] : null
+  }
+
   // Get main trailer - check anime.trailer first, then videos.promo
-  const mainTrailerYoutubeId = anime?.trailer?.youtube_id || videos?.promo?.[0]?.trailer?.youtube_id
+  // Handle case where youtube_id is null but embed_url exists
+  const animeTrailerId = anime?.trailer?.youtube_id || extractYoutubeId(anime?.trailer?.embed_url)
+  const promoTrailerId = videos?.promo?.[0]?.trailer?.youtube_id || extractYoutubeId(videos?.promo?.[0]?.trailer?.embed_url)
+  const mainTrailerYoutubeId = animeTrailerId || promoTrailerId
   
   // Get all available promos for additional videos
-  const allPromos = videos?.promo || []
+  const allPromos = (videos?.promo || []).map(promo => ({
+    ...promo,
+    extractedYoutubeId: promo.trailer.youtube_id || extractYoutubeId(promo.trailer.embed_url)
+  })).filter(promo => promo.extractedYoutubeId)
   
   // Current video to display (selected or main)
   const currentVideoId = selectedVideoId || mainTrailerYoutubeId
@@ -561,22 +574,18 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                             {allPromos.map((promo, idx) => (
                               <button
                                 key={idx}
-                                onClick={() => setSelectedVideoId(promo.trailer.youtube_id)}
+                                onClick={() => setSelectedVideoId(promo.extractedYoutubeId)}
                                 className={cn(
                                   "relative shrink-0 w-40 aspect-video rounded-lg overflow-hidden group border-2 transition-colors",
-                                  currentVideoId === promo.trailer.youtube_id 
+                                  currentVideoId === promo.extractedYoutubeId 
                                     ? "border-primary" 
                                     : "border-transparent hover:border-primary/50"
                                 )}
                               >
                                 <img
-                                  src={promo.trailer.images?.medium_image_url || promo.trailer.images?.image_url || `https://img.youtube.com/vi/${promo.trailer.youtube_id}/mqdefault.jpg`}
+                                  src={`https://img.youtube.com/vi/${promo.extractedYoutubeId}/mqdefault.jpg`}
                                   alt={promo.title}
                                   className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement
-                                    target.src = `https://img.youtube.com/vi/${promo.trailer.youtube_id}/mqdefault.jpg`
-                                  }}
                                 />
                                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                   <Play className="w-8 h-8 text-white" />
