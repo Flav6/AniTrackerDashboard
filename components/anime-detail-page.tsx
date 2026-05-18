@@ -508,9 +508,9 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                   <div className="p-4">
                     {/* Trailer Tab */}
                     {activeTab === "trailer" && (
-                      <div>
+                      <div className="flex flex-col items-center">
                         {currentVideoId ? (
-                          <div className="aspect-video rounded-lg overflow-hidden bg-black">
+                          <div className="w-full max-w-3xl aspect-video rounded-lg overflow-hidden bg-black">
                             <iframe
                               src={`https://www.youtube.com/embed/${currentVideoId}?rel=0`}
                               title={`${anime.title} Trailer`}
@@ -520,7 +520,7 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                             />
                           </div>
                         ) : (
-                          <div className="aspect-video flex items-center justify-center bg-muted/20 rounded-lg">
+                          <div className="w-full max-w-3xl aspect-video flex items-center justify-center bg-muted/20 rounded-lg">
                             <div className="text-center text-muted-foreground">
                               <Film className="w-12 h-12 mx-auto mb-2 opacity-50" />
                               <p>Trailer não disponível</p>
@@ -530,7 +530,7 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
 
                         {/* Additional Videos */}
                         {allPromos.length > 0 && (
-                          <div className="mt-4">
+                          <div className="mt-4 w-full max-w-3xl">
                             <p className="text-sm text-muted-foreground mb-3">Mais vídeos</p>
                             <div className="flex gap-3 overflow-x-auto pb-2">
                               {allPromos.map((promo, idx) => (
