@@ -13,14 +13,14 @@ Este é um dashboard moderno e funcional para acompanhar e organizar a sua lista
 ---
 
 ## 🚀 Funcionalidades
-- **Sincronização Automática**: Puxa meus dados do MyAnimeList (Kyriuu__San).
-- **Badges de Progresso**: Mostra em qual episódio parei em cada anime.
-- **Cards Interativos**: Clique no anime para ir direto para a página oficial.
+- **Sincronização Automática**: Puxa seus dados do MyAnimeList.
+- **Badges de Progresso**: Visualize o progesso de episódios em cada anime.
+- **Cards Interativos**: Clique no card do anime para confeir as informações direto para na página oficial.
 
 ## 🎨 Design & Estética
 O visual foi inspirado em um design premium com as seguintes características:
 - **Glassmorphism**: Cards com efeito de vidro e desfoque.
-- **Moody Theme**: Paleta de cores em tons de vinho (#2D1217).
+- **Moody Theme**: Paleta de cores em tons minimalistas e modernos.
 - **Responsividade**: Funciona perfeitamente em computadores e celulares.
 
 ## 📸 Screenshots
