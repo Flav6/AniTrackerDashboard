@@ -36,7 +36,9 @@ O visual foi inspirado em um design premium com as seguintes características:
 <img width="1893" height="930" alt="{18C2C331-B5FF-49E2-8612-342662E4DB67}" src="https://github.com/user-attachments/assets/697fecfe-867d-4a5c-b565-a7b4107a162d" />
 
 ---
+<img width="1440" height="763" alt="WhatsApp Image 2026-05-18 at 10 09 08" src="https://github.com/user-attachments/assets/772c779b-8c55-4b14-a85b-30c54f8c1571" />
 
+---
 
 <img width="342" height="888" alt="{7BC2C18D-A70D-4368-862B-2B5E088E07F1}" src="https://github.com/user-attachments/assets/8c030d3b-5fe1-478c-b2cb-4044fbc36b84" />
 
