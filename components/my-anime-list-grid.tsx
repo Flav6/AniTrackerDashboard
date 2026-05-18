@@ -315,6 +315,8 @@ function AnimeListCard({ item, onClick }: { item: UserAnimeListEntry; onClick: (
               <img
                 src={entry.images.jpg.image_url}
                 alt={entry.title}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
               {score > 0 && (

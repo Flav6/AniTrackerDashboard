@@ -4,7 +4,6 @@ import useSWR from "swr"
 import { AnimeCard } from "./anime-card"
 import { AnimeDetailModal } from "./anime-detail-modal"
 import { AnimeDetailPage } from "./anime-detail-page"
-import { Skeleton } from "@/components/ui/skeleton"
 import { fetchTopAnime, fetchSeasonalAnime, fetchUpcomingAnime, type AnimeCategory, type AnimeData } from "@/lib/jikan"
 import { useState } from "react"
 import { AlertCircle, RefreshCw } from "lucide-react"
@@ -50,8 +49,15 @@ export function AnimeGrid({ category, searchQuery }: AnimeGridProps) {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
         {Array.from({ length: 12 }).map((_, i) => (
-          <div key={i} className="glass-card rounded-xl overflow-hidden animate-fade-in" style={{ animationDelay: `${i * 50}ms` }}>
+          <div key={i} className="glass-card rounded-xl overflow-hidden">
             <div className="aspect-[3/4] skeleton-pulse" />
+            <div className="p-3 space-y-2">
+              <div className="h-4 skeleton-pulse rounded w-3/4" />
+              <div className="flex gap-1.5">
+                <div className="h-5 skeleton-pulse rounded w-12" />
+                <div className="h-5 skeleton-pulse rounded w-16" />
+              </div>
+            </div>
           </div>
         ))}
       </div>
