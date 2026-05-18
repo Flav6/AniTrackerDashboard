@@ -91,7 +91,11 @@ export function AnimeGrid({ category, searchQuery }: AnimeGridProps) {
     <>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
         {uniqueAnimes.map((anime, index) => (
-          <div key={`${anime.mal_id}-${index}`} style={{ animationDelay: `${Math.min(index * 30, 300)}ms` }} className="opacity-0 animate-fade-in-up">
+          <div 
+            key={`${anime.mal_id}-${index}`} 
+            className="animate-fade-in-up"
+            style={{ animationDelay: `${Math.min(index * 30, 300)}ms`, animationFillMode: 'both' }}
+          >
             <AnimeCard 
               anime={anime} 
               onClick={() => setSelectedAnime(anime)}
