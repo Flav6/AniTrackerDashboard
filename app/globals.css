@@ -1,0 +1,237 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Theme hue variable for dynamic theming */
+  --theme-hue: 350;
+  --theme-saturation: 0.18;
+  
+  /* Wine / Burgundy color palette with dark theme */
+  --background: oklch(0.12 0.02 350);
+  --foreground: oklch(0.95 0.01 350);
+  --card: oklch(0.18 0.03 350 / 0.6);
+  --card-foreground: oklch(0.95 0.01 350);
+  --popover: oklch(0.16 0.025 350 / 0.8);
+  --popover-foreground: oklch(0.95 0.01 350);
+  --primary: oklch(0.55 0.18 350);
+  --primary-foreground: oklch(0.98 0.01 350);
+  --secondary: oklch(0.25 0.04 350 / 0.5);
+  --secondary-foreground: oklch(0.92 0.01 350);
+  --muted: oklch(0.22 0.03 350 / 0.4);
+  --muted-foreground: oklch(0.70 0.02 350);
+  --accent: oklch(0.45 0.15 350);
+  --accent-foreground: oklch(0.98 0.01 350);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.95 0 0);
+  --border: oklch(0.35 0.06 350 / 0.3);
+  --input: oklch(0.25 0.04 350 / 0.5);
+  --ring: oklch(0.55 0.18 350);
+  --chart-1: oklch(0.55 0.18 350);
+  --chart-2: oklch(0.65 0.15 20);
+  --chart-3: oklch(0.50 0.12 330);
+  --chart-4: oklch(0.70 0.10 10);
+  --chart-5: oklch(0.45 0.15 340);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.14 0.025 350 / 0.7);
+  --sidebar-foreground: oklch(0.95 0.01 350);
+  --sidebar-primary: oklch(0.55 0.18 350);
+  --sidebar-primary-foreground: oklch(0.98 0.01 350);
+  --sidebar-accent: oklch(0.30 0.06 350 / 0.5);
+  --sidebar-accent-foreground: oklch(0.95 0.01 350);
+  --sidebar-border: oklch(0.35 0.06 350 / 0.3);
+  --sidebar-ring: oklch(0.55 0.18 350);
+  
+  /* Glassmorphism custom properties */
+  --glass-bg: oklch(0.20 0.04 350 / 0.25);
+  --glass-border: oklch(0.50 0.10 350 / 0.2);
+  --glass-shadow: 0 8px 32px oklch(0.10 0.02 350 / 0.4);
+}
+
+.dark {
+  --background: oklch(0.10 0.02 350);
+  --foreground: oklch(0.95 0.01 350);
+  --card: oklch(0.16 0.03 350 / 0.5);
+  --card-foreground: oklch(0.95 0.01 350);
+  --popover: oklch(0.14 0.025 350 / 0.8);
+  --popover-foreground: oklch(0.95 0.01 350);
+  --primary: oklch(0.55 0.18 350);
+  --primary-foreground: oklch(0.98 0.01 350);
+  --secondary: oklch(0.22 0.04 350 / 0.5);
+  --secondary-foreground: oklch(0.92 0.01 350);
+  --muted: oklch(0.20 0.03 350 / 0.4);
+  --muted-foreground: oklch(0.65 0.02 350);
+  --accent: oklch(0.45 0.15 350);
+  --accent-foreground: oklch(0.98 0.01 350);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.32 0.06 350 / 0.3);
+  --input: oklch(0.22 0.04 350 / 0.5);
+  --ring: oklch(0.55 0.18 350);
+  --chart-1: oklch(0.55 0.18 350);
+  --chart-2: oklch(0.65 0.15 20);
+  --chart-3: oklch(0.50 0.12 330);
+  --chart-4: oklch(0.70 0.10 10);
+  --chart-5: oklch(0.45 0.15 340);
+  --sidebar: oklch(0.12 0.02 350 / 0.7);
+  --sidebar-foreground: oklch(0.95 0.01 350);
+  --sidebar-primary: oklch(0.55 0.18 350);
+  --sidebar-primary-foreground: oklch(0.98 0.01 350);
+  --sidebar-accent: oklch(0.28 0.05 350 / 0.5);
+  --sidebar-accent-foreground: oklch(0.95 0.01 350);
+  --sidebar-border: oklch(0.32 0.06 350 / 0.3);
+  --sidebar-ring: oklch(0.55 0.18 350);
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-glass-bg: var(--glass-bg);
+  --color-glass-border: var(--glass-border);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Glassmorphism utility classes - using CSS variables for theming */
+.glass {
+  background: oklch(0.16 0.03 var(--theme-hue, 350) / 0.65);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  border: 1px solid oklch(0.55 0.10 var(--theme-hue, 350) / 0.25);
+  box-shadow: 
+    0 4px 24px oklch(0.08 0.02 var(--theme-hue, 350) / 0.4),
+    inset 0 1px 0 oklch(0.95 0.01 var(--theme-hue, 350) / 0.05);
+}
+
+.glass-card {
+  background: oklch(0.15 0.03 var(--theme-hue, 350) / 0.7);
+  backdrop-filter: blur(24px) saturate(1.3);
+  -webkit-backdrop-filter: blur(24px) saturate(1.3);
+  border: 1px solid oklch(0.55 0.10 var(--theme-hue, 350) / 0.2);
+  box-shadow: 
+    0 8px 32px oklch(0.06 0.02 var(--theme-hue, 350) / 0.5),
+    0 2px 8px oklch(0.08 0.02 var(--theme-hue, 350) / 0.3),
+    inset 0 1px 0 oklch(0.95 0.01 var(--theme-hue, 350) / 0.08);
+}
+
+.glass-sidebar {
+  background: oklch(0.13 0.025 var(--theme-hue, 350) / 0.85);
+  backdrop-filter: blur(32px) saturate(1.4);
+  -webkit-backdrop-filter: blur(32px) saturate(1.4);
+  border-right: 1px solid oklch(0.50 0.08 var(--theme-hue, 350) / 0.25);
+  box-shadow: 
+    4px 0 24px oklch(0.06 0.02 var(--theme-hue, 350) / 0.4),
+    inset -1px 0 0 oklch(0.95 0.01 var(--theme-hue, 350) / 0.05);
+}
+
+/* Enhanced glass panels for sections */
+.glass-panel {
+  background: oklch(0.14 0.025 var(--theme-hue, 350) / 0.75);
+  backdrop-filter: blur(28px) saturate(1.3);
+  -webkit-backdrop-filter: blur(28px) saturate(1.3);
+  border: 1px solid oklch(0.55 0.10 var(--theme-hue, 350) / 0.2);
+  border-radius: 1rem;
+  box-shadow: 
+    0 8px 40px oklch(0.05 0.02 var(--theme-hue, 350) / 0.5),
+    inset 0 1px 0 oklch(0.95 0.01 var(--theme-hue, 350) / 0.06);
+}
+
+/* Glass button/input style */
+.glass-input {
+  background: oklch(0.14 0.025 var(--theme-hue, 350) / 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid oklch(0.50 0.08 var(--theme-hue, 350) / 0.3);
+}
+
+/* Dynamic gradient background - uses CSS variable for theme */
+.wine-gradient {
+  background: 
+    radial-gradient(ellipse at 20% 20%, oklch(0.30 0.10 var(--theme-hue, 350) / 0.5) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, oklch(0.25 0.08 var(--theme-hue, 350) / 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, oklch(0.20 0.06 var(--theme-hue, 350) / 0.3) 0%, transparent 70%),
+    linear-gradient(180deg, oklch(0.08 0.02 var(--theme-hue, 350)) 0%, oklch(0.12 0.03 var(--theme-hue, 350)) 100%);
+}
+
+/* Custom Scrollbar - Minimalist Dark Style */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.40 0.05 var(--theme-hue, 350) / 0.3) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: oklch(0.50 0.05 var(--theme-hue, 350) / 0.25);
+  border-radius: 100px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.55 0.08 var(--theme-hue, 350) / 0.4);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: oklch(0.60 0.10 var(--theme-hue, 350) / 0.5);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Hide scrollbar buttons/arrows */
+*::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
