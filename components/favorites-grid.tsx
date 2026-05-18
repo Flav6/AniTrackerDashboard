@@ -2,19 +2,17 @@
 
 import useSWR from "swr"
 import { fetchUserFavorites } from "@/lib/jikan"
-import { Loader2, Heart, AlertCircle, ExternalLink, Star } from "lucide-react"
+import { Loader2, Heart, AlertCircle, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { fetchAnimeById, type AnimeData } from "@/lib/jikan"
-import { AnimeDetailModal } from "@/components/anime-detail-modal"
+import { AnimeDetailPage } from "@/components/anime-detail-page"
 
 interface FavoritesGridProps {
   username: string
 }
 
 export function FavoritesGrid({ username }: FavoritesGridProps) {
-  const [selectedAnimeData, setSelectedAnimeData] = useState<AnimeData | null>(null)
-  const [loadingDetails, setLoadingDetails] = useState(false)
+  const [selectedAnimeId, setSelectedAnimeId] = useState<number | null>(null)
 
   const { data, error, isLoading, mutate } = useSWR(
     username ? [`user-favorites`, username] : null,
@@ -25,16 +23,8 @@ export function FavoritesGrid({ username }: FavoritesGridProps) {
     }
   )
 
-  const handleAnimeClick = async (animeId: number) => {
-    setLoadingDetails(true)
-    try {
-      const response = await fetchAnimeById(animeId)
-      setSelectedAnimeData(response.data)
-    } catch (err) {
-      console.error("Error fetching anime details:", err)
-    } finally {
-      setLoadingDetails(false)
-    }
+  const handleAnimeClick = (animeId: number) => {
+    setSelectedAnimeId(animeId)
   }
 
   if (isLoading) {
@@ -148,21 +138,13 @@ export function FavoritesGrid({ username }: FavoritesGridProps) {
         ))}
       </div>
 
-      {/* Anime Detail Modal */}
-      <AnimeDetailModal 
-        anime={selectedAnimeData} 
-        open={selectedAnimeData !== null} 
-        onClose={() => setSelectedAnimeData(null)}
-      />
-
-      {/* Loading overlay for details */}
-      {loadingDetails && (
-        <div className="fixed inset-0 bg-background/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="glass-panel p-6 rounded-xl flex items-center gap-3">
-            <Loader2 className="w-5 h-5 animate-spin text-primary" />
-            <span className="text-foreground">Carregando detalhes...</span>
-          </div>
-        </div>
+      {/* Anime Detail Page */}
+      {selectedAnimeId && (
+        <AnimeDetailPage 
+          animeId={selectedAnimeId}
+          onClose={() => setSelectedAnimeId(null)}
+          onAnimeSelect={(id) => setSelectedAnimeId(id)}
+        />
       )}
     </div>
   )

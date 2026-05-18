@@ -1,14 +1,14 @@
 "use client"
 
 import useSWR from "swr"
-import { fetchUserAnimeList, fetchAnimeById, type AnimeListStatus, statusLabels, type UserAnimeListEntry, type AnimeData } from "@/lib/jikan"
+import { fetchUserAnimeList, type AnimeListStatus, statusLabels, type UserAnimeListEntry } from "@/lib/jikan"
 import { Loader2, Star, Tv, Calendar, AlertCircle, ListX, ExternalLink, RefreshCw, Info, Plus } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
-import { AnimeDetailModal } from "@/components/anime-detail-modal"
+import { AnimeDetailPage } from "@/components/anime-detail-page"
 import {
   Tooltip,
   TooltipContent,
@@ -51,8 +51,6 @@ function deduplicateAnimeList(list: UserAnimeListEntry[]): UserAnimeListEntry[] 
 export function MyAnimeListGrid({ username, userStats }: MyAnimeListGridProps) {
   const [activeStatus, setActiveStatus] = useState<AnimeListStatus>("all")
   const [selectedAnimeId, setSelectedAnimeId] = useState<number | null>(null)
-  const [selectedAnimeData, setSelectedAnimeData] = useState<AnimeData | null>(null)
-  const [loadingDetails, setLoadingDetails] = useState(false)
 
   const { data, error, isLoading, mutate } = useSWR(
     username ? [`user-animelist`, username, activeStatus] : null,
@@ -65,22 +63,12 @@ export function MyAnimeListGrid({ username, userStats }: MyAnimeListGridProps) {
     }
   )
 
-  const handleAnimeClick = async (animeId: number) => {
+  const handleAnimeClick = (animeId: number) => {
     setSelectedAnimeId(animeId)
-    setLoadingDetails(true)
-    try {
-      const response = await fetchAnimeById(animeId)
-      setSelectedAnimeData(response.data)
-    } catch (err) {
-      console.error("Error fetching anime details:", err)
-    } finally {
-      setLoadingDetails(false)
-    }
   }
 
   const handleCloseModal = () => {
     setSelectedAnimeId(null)
-    setSelectedAnimeData(null)
   }
 
   const filterButtons: AnimeListStatus[] = ["all", "watching", "completed", "on_hold", "dropped", "plan_to_watch"]
@@ -264,21 +252,13 @@ export function MyAnimeListGrid({ username, userStats }: MyAnimeListGridProps) {
           </div>
         )}
 
-        {/* Anime Detail Modal */}
-        <AnimeDetailModal 
-          anime={selectedAnimeData} 
-          open={selectedAnimeId !== null} 
-          onClose={handleCloseModal}
-        />
-
-        {/* Loading overlay for details */}
-        {loadingDetails && (
-          <div className="fixed inset-0 bg-background/50 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="glass-panel p-6 rounded-xl flex items-center gap-3">
-              <Loader2 className="w-5 h-5 animate-spin text-primary" />
-              <span className="text-foreground">Carregando detalhes...</span>
-            </div>
-          </div>
+        {/* Anime Detail Page */}
+        {selectedAnimeId && (
+          <AnimeDetailPage 
+            animeId={selectedAnimeId}
+            onClose={handleCloseModal}
+            onAnimeSelect={(id) => setSelectedAnimeId(id)}
+          />
         )}
       </div>
     </TooltipProvider>
