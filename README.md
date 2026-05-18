@@ -1,7 +1,7 @@
 # 🏮 AniTracker Dashboard
 
 > **Status:** Online 🟢  
-> **Link:** [Visualizar Site](https://v0-anitracker-dashboard.vercel.app/)
+> **Link:** [AniTracker_Dash](https://v0-anitracker-dashboard.vercel.app/)
 
 Este é um dashboard moderno e funcional para acompanhar e organizar a sua lista de animes em tempo real, sincronizado diretamente com o **MyAnimeList**.
 
