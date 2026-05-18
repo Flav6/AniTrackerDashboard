@@ -38,7 +38,7 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null)
 
-  // Reset selected video when anime changes
+  // Reset state when anime changes
   useEffect(() => {
     setSelectedVideoId(null)
     setActiveTab("trailer")
@@ -97,27 +97,25 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
   // Helper function to extract YouTube ID from embed URL
   function extractYoutubeId(embedUrl: string | null | undefined): string | null {
     if (!embedUrl) return null
-    // Match patterns like /embed/VIDEO_ID or /v/VIDEO_ID
     const match = embedUrl.match(/(?:embed|v)\/([a-zA-Z0-9_-]+)/)
     return match ? match[1] : null
   }
 
-  // Get main trailer - check anime.trailer first, then videos.promo
-  // Handle case where youtube_id is null but embed_url exists
+  // Get main trailer
   const animeTrailerId = anime?.trailer?.youtube_id || extractYoutubeId(anime?.trailer?.embed_url)
   const promoTrailerId = videos?.promo?.[0]?.trailer?.youtube_id || extractYoutubeId(videos?.promo?.[0]?.trailer?.embed_url)
   const mainTrailerYoutubeId = animeTrailerId || promoTrailerId
   
-  // Get all available promos for additional videos
+  // Get all available promos
   const allPromos = (videos?.promo || []).map(promo => ({
     ...promo,
     extractedYoutubeId: promo.trailer.youtube_id || extractYoutubeId(promo.trailer.embed_url)
   })).filter(promo => promo.extractedYoutubeId)
   
-  // Current video to display (selected or main)
+  // Current video to display
   const currentVideoId = selectedVideoId || mainTrailerYoutubeId
 
-  // Get director/writer from staff
+  // Get staff info
   const director = staff?.find(s => s.positions.some(p => p.toLowerCase().includes("director")))
   const writer = staff?.find(s => s.positions.some(p => p.toLowerCase().includes("script") || p.toLowerCase().includes("original creator")))
 
@@ -156,12 +154,7 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
   }
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 overflow-hidden"
-    >
+    <div className="fixed inset-0 z-50 overflow-hidden animate-in fade-in duration-300">
       {/* Background with anime image blur */}
       <div 
         className="absolute inset-0 bg-cover bg-center scale-110 blur-3xl opacity-30"
@@ -220,49 +213,43 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
             {/* Title Overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
               <div className="max-w-7xl mx-auto">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground mb-3 text-balance drop-shadow-lg">
-                    {anime.title_english || anime.title}
-                  </h1>
-                  {anime.title_japanese && anime.title_english && (
-                    <p className="text-lg md:text-xl text-muted-foreground mb-4">
-                      {anime.title_japanese}
-                    </p>
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground mb-3 text-balance drop-shadow-lg">
+                  {anime.title_english || anime.title}
+                </h1>
+                {anime.title_japanese && anime.title_english && (
+                  <p className="text-lg md:text-xl text-muted-foreground mb-4">
+                    {anime.title_japanese}
+                  </p>
+                )}
+                
+                {/* Meta Info */}
+                <div className="flex flex-wrap items-center gap-2 md:gap-3 text-sm md:text-base text-muted-foreground">
+                  {anime.year && <span>{anime.year}</span>}
+                  {anime.type && (
+                    <>
+                      <span className="text-primary">|</span>
+                      <span>{anime.type}</span>
+                    </>
                   )}
-                  
-                  {/* Meta Info */}
-                  <div className="flex flex-wrap items-center gap-2 md:gap-3 text-sm md:text-base text-muted-foreground">
-                    {anime.year && <span>{anime.year}</span>}
-                    {anime.type && (
-                      <>
-                        <span className="text-primary">|</span>
-                        <span>{anime.type}</span>
-                      </>
-                    )}
-                    {anime.episodes && (
-                      <>
-                        <span className="text-primary">|</span>
-                        <span>{anime.episodes} eps</span>
-                      </>
-                    )}
-                    {anime.duration && (
-                      <>
-                        <span className="text-primary">|</span>
-                        <span>{anime.duration}</span>
-                      </>
-                    )}
-                    {anime.rating && (
-                      <>
-                        <span className="text-primary">|</span>
-                        <span>{anime.rating}</span>
-                      </>
-                    )}
-                  </div>
-                </motion.div>
+                  {anime.episodes && (
+                    <>
+                      <span className="text-primary">|</span>
+                      <span>{anime.episodes} eps</span>
+                    </>
+                  )}
+                  {anime.duration && (
+                    <>
+                      <span className="text-primary">|</span>
+                      <span>{anime.duration}</span>
+                    </>
+                  )}
+                  {anime.rating && (
+                    <>
+                      <span className="text-primary">|</span>
+                      <span>{anime.rating}</span>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -273,27 +260,17 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
               {/* Left Column - Poster & Info */}
               <div className="space-y-6">
                 {/* Poster Card */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="glass-panel rounded-2xl overflow-hidden shadow-2xl"
-                >
+                <div className="glass-panel rounded-2xl overflow-hidden shadow-2xl">
                   <img
                     src={anime.images.jpg.large_image_url}
                     alt={anime.title}
                     className="w-full aspect-[3/4] object-cover"
                   />
-                </motion.div>
+                </div>
 
                 {/* Score Card */}
                 {anime.score && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.4 }}
-                    className="glass-panel rounded-2xl p-6 text-center"
-                  >
+                  <div className="glass-panel rounded-2xl p-6 text-center">
                     <div className="relative w-24 h-24 mx-auto mb-3">
                       <svg className="w-full h-full -rotate-90">
                         <circle
@@ -324,16 +301,11 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                     <p className="text-sm text-muted-foreground">
                       {anime.scored_by ? `${formatNumber(anime.scored_by)} avaliações` : "Nota MAL"}
                     </p>
-                  </motion.div>
+                  </div>
                 )}
 
                 {/* Quick Stats */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="glass-panel rounded-2xl p-4 space-y-3"
-                >
+                <div className="glass-panel rounded-2xl p-4 space-y-3">
                   {anime.rank && (
                     <div className="flex items-center justify-between">
                       <span className="text-muted-foreground flex items-center gap-2">
@@ -379,16 +351,11 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                       <span className="font-semibold">{anime.source}</span>
                     </div>
                   )}
-                </motion.div>
+                </div>
 
                 {/* Streaming Links */}
                 {anime.streaming && anime.streaming.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 }}
-                    className="glass-panel rounded-2xl p-4"
-                  >
+                  <div className="glass-panel rounded-2xl p-4">
                     <h3 className="text-sm font-semibold text-muted-foreground mb-3">Onde Assistir</h3>
                     <div className="flex flex-wrap gap-2">
                       {anime.streaming.slice(0, 4).map((stream) => (
@@ -403,19 +370,14 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                         </Button>
                       ))}
                     </div>
-                  </motion.div>
+                  </div>
                 )}
               </div>
 
               {/* Right Column - Details */}
               <div className="space-y-8">
                 {/* Staff & Synopsis Section */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="glass-panel rounded-2xl p-6"
-                >
+                <div className="glass-panel rounded-2xl p-6">
                   <div className="flex flex-col md:flex-row gap-6">
                     {/* Staff Info */}
                     <div className="md:w-1/3 space-y-4">
@@ -486,213 +448,202 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                     <div className="mt-6 pt-6 border-t border-border/30">
                       <div className="flex flex-wrap gap-2">
                         {anime.genres.map((genre) => (
-                          <Badge 
-                            key={genre.mal_id} 
-                            variant="outline"
-                            className="bg-primary/10 text-primary border-primary/30 hover:bg-primary/20"
-                          >
+                          <Badge key={genre.mal_id} variant="secondary" className="glass-card">
                             {genre.name}
                           </Badge>
                         ))}
                         {anime.themes?.map((theme) => (
-                          <Badge 
-                            key={theme.mal_id} 
-                            variant="outline"
-                            className="bg-secondary/50 border-border/50"
-                          >
+                          <Badge key={theme.mal_id} variant="outline" className="glass-card">
                             {theme.name}
                           </Badge>
                         ))}
                       </div>
                     </div>
                   )}
-                </motion.div>
+                </div>
 
                 {/* Media Tabs */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  <div className="flex items-center gap-2 mb-6">
-                    <Button
-                      variant={activeTab === "trailer" ? "default" : "ghost"}
-                      size="sm"
+                <div className="glass-panel rounded-2xl overflow-hidden">
+                  {/* Tab Headers */}
+                  <div className="flex border-b border-border/30">
+                    <button
                       onClick={() => setActiveTab("trailer")}
-                      className="gap-2"
+                      className={cn(
+                        "flex-1 px-4 py-3 text-sm font-medium transition-colors flex items-center justify-center gap-2",
+                        activeTab === "trailer" 
+                          ? "text-primary border-b-2 border-primary bg-primary/5" 
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
                     >
                       <Play className="w-4 h-4" />
                       Trailer
-                    </Button>
-                    <Button
-                      variant={activeTab === "gallery" ? "default" : "ghost"}
-                      size="sm"
+                    </button>
+                    <button
                       onClick={() => setActiveTab("gallery")}
-                      className="gap-2"
+                      className={cn(
+                        "flex-1 px-4 py-3 text-sm font-medium transition-colors flex items-center justify-center gap-2",
+                        activeTab === "gallery" 
+                          ? "text-primary border-b-2 border-primary bg-primary/5" 
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
                     >
                       <ImageIcon className="w-4 h-4" />
                       Galeria
-                    </Button>
-                    <Button
-                      variant={activeTab === "characters" ? "default" : "ghost"}
-                      size="sm"
+                    </button>
+                    <button
                       onClick={() => setActiveTab("characters")}
-                      className="gap-2"
+                      className={cn(
+                        "flex-1 px-4 py-3 text-sm font-medium transition-colors flex items-center justify-center gap-2",
+                        activeTab === "characters" 
+                          ? "text-primary border-b-2 border-primary bg-primary/5" 
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
                     >
                       <Mic2 className="w-4 h-4" />
                       Personagens
-                    </Button>
+                    </button>
                   </div>
 
-                  {/* Trailer Tab */}
-                  {activeTab === "trailer" && (
-                    <div className="glass-panel rounded-2xl overflow-hidden">
-                      {currentVideoId ? (
-                        <div className="aspect-video">
-                          <iframe
-                            src={`https://www.youtube.com/embed/${currentVideoId}?rel=0&autoplay=0`}
-                            title={`${anime.title} Trailer`}
-                            className="w-full h-full"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                          />
-                        </div>
-                      ) : (
-                        <div className="aspect-video flex items-center justify-center bg-muted/20">
-                          <div className="text-center text-muted-foreground">
-                            <Film className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                            <p>Trailer não disponível</p>
+                  {/* Tab Content */}
+                  <div className="p-4">
+                    {/* Trailer Tab */}
+                    {activeTab === "trailer" && (
+                      <div>
+                        {currentVideoId ? (
+                          <div className="aspect-video rounded-lg overflow-hidden bg-black">
+                            <iframe
+                              src={`https://www.youtube.com/embed/${currentVideoId}?rel=0`}
+                              title={`${anime.title} Trailer`}
+                              className="w-full h-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            />
                           </div>
-                        </div>
-                      )}
-
-                      {/* Additional Promos */}
-                      {allPromos.length > 0 && (
-                        <div className="p-4 border-t border-border/30">
-                          <p className="text-sm text-muted-foreground mb-3">Mais vídeos</p>
-                          <div className="flex gap-3 overflow-x-auto pb-2">
-                            {allPromos.map((promo, idx) => (
-                              <button
-                                key={idx}
-                                onClick={() => setSelectedVideoId(promo.extractedYoutubeId)}
-                                className={cn(
-                                  "relative shrink-0 w-40 aspect-video rounded-lg overflow-hidden group border-2 transition-colors",
-                                  currentVideoId === promo.extractedYoutubeId 
-                                    ? "border-primary" 
-                                    : "border-transparent hover:border-primary/50"
-                                )}
-                              >
-                                <img
-                                  src={`https://img.youtube.com/vi/${promo.extractedYoutubeId}/mqdefault.jpg`}
-                                  alt={promo.title}
-                                  className="w-full h-full object-cover"
-                                />
-                                <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                  <Play className="w-8 h-8 text-white" />
-                                </div>
-                                <p className="absolute bottom-0 left-0 right-0 p-2 text-xs text-white bg-gradient-to-t from-black/80 to-transparent truncate">
-                                  {promo.title}
-                                </p>
-                              </button>
-                            ))}
+                        ) : (
+                          <div className="aspect-video flex items-center justify-center bg-muted/20 rounded-lg">
+                            <div className="text-center text-muted-foreground">
+                              <Film className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                              <p>Trailer não disponível</p>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                        )}
 
-                  {/* Gallery Tab */}
-                  {activeTab === "gallery" && (
-                    <div className="glass-panel rounded-2xl p-4">
-                      {pictures && pictures.length > 0 ? (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                          {pictures.map((pic, idx) => (
+                        {/* Additional Videos */}
+                        {allPromos.length > 0 && (
+                          <div className="mt-4">
+                            <p className="text-sm text-muted-foreground mb-3">Mais vídeos</p>
+                            <div className="flex gap-3 overflow-x-auto pb-2">
+                              {allPromos.map((promo, idx) => (
+                                <button
+                                  key={idx}
+                                  onClick={() => setSelectedVideoId(promo.extractedYoutubeId)}
+                                  className={cn(
+                                    "relative shrink-0 w-40 aspect-video rounded-lg overflow-hidden group border-2 transition-all",
+                                    currentVideoId === promo.extractedYoutubeId 
+                                      ? "border-primary" 
+                                      : "border-transparent hover:border-primary/50"
+                                  )}
+                                >
+                                  <img
+                                    src={`https://img.youtube.com/vi/${promo.extractedYoutubeId}/mqdefault.jpg`}
+                                    alt={promo.title}
+                                    className="w-full h-full object-cover"
+                                  />
+                                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Play className="w-8 h-8 text-white" />
+                                  </div>
+                                  <p className="absolute bottom-0 left-0 right-0 p-2 text-xs text-white bg-gradient-to-t from-black/80 to-transparent truncate">
+                                    {promo.title}
+                                  </p>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Gallery Tab */}
+                    {activeTab === "gallery" && (
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        {pictures && pictures.length > 0 ? (
+                          pictures.slice(0, 9).map((pic, idx) => (
                             <button
                               key={idx}
                               onClick={() => setSelectedImage(pic.jpg.large_image_url)}
-                              className="relative aspect-[3/4] rounded-lg overflow-hidden group"
+                              className="aspect-[3/4] rounded-lg overflow-hidden group relative"
                             >
                               <img
                                 src={pic.jpg.image_url}
                                 alt={`${anime.title} - Imagem ${idx + 1}`}
-                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                               />
                               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors" />
                             </button>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="text-center py-12 text-muted-foreground">
-                          <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                          <p>Nenhuma imagem disponível</p>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                          ))
+                        ) : (
+                          <div className="col-span-full text-center py-12 text-muted-foreground">
+                            <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                            <p>Nenhuma imagem disponível</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
-                  {/* Characters Tab */}
-                  {activeTab === "characters" && (
-                    <div className="glass-panel rounded-2xl p-4">
-                      {japaneseVAs && japaneseVAs.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {japaneseVAs.map((item, idx) => (
-                            <div
-                              key={idx}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-background/30"
-                            >
+                    {/* Characters Tab */}
+                    {activeTab === "characters" && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {japaneseVAs && japaneseVAs.length > 0 ? (
+                          japaneseVAs.map((item, idx) => (
+                            <div key={idx} className="flex items-center gap-3 glass-card rounded-lg p-3">
                               <img
                                 src={item.character.images.jpg.image_url}
                                 alt={item.character.name}
-                                className="w-14 h-14 rounded-full object-cover border-2 border-primary/30"
+                                className="w-14 h-14 rounded-lg object-cover"
                               />
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium truncate">{item.character.name}</p>
-                                <p className="text-xs text-muted-foreground">Personagem</p>
+                                <p className="text-xs text-muted-foreground truncate">
+                                  CV: {item.voiceActor?.person.name}
+                                </p>
                               </div>
-                              <div className="flex-1 min-w-0 text-right">
-                                <p className="font-medium truncate">{item.voiceActor?.person.name}</p>
-                                <p className="text-xs text-muted-foreground">Dublador</p>
-                              </div>
-                              <img
-                                src={item.voiceActor?.person.images.jpg.image_url}
-                                alt={item.voiceActor?.person.name}
-                                className="w-14 h-14 rounded-full object-cover border-2 border-secondary/30"
-                              />
+                              {item.voiceActor && (
+                                <img
+                                  src={item.voiceActor.person.images.jpg.image_url}
+                                  alt={item.voiceActor.person.name}
+                                  className="w-10 h-10 rounded-full object-cover"
+                                />
+                              )}
                             </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="text-center py-12 text-muted-foreground">
-                          <Mic2 className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                          <p>Informações de personagens não disponíveis</p>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </motion.div>
+                          ))
+                        ) : (
+                          <div className="col-span-full text-center py-12 text-muted-foreground">
+                            <Mic2 className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                            <p>Nenhum personagem disponível</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
 
                 {/* Recommendations */}
                 {recommendations && recommendations.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 }}
-                  >
+                  <div className="glass-panel rounded-2xl p-6">
                     <h3 className="text-lg font-semibold mb-4">Recomendações</h3>
-                    <div className="flex gap-4 overflow-x-auto pb-4">
-                      {recommendations.slice(0, 8).map((rec) => (
+                    <div className="flex gap-4 overflow-x-auto pb-2">
+                      {recommendations.slice(0, 10).map((rec) => (
                         <button
                           key={rec.entry.mal_id}
                           onClick={() => onAnimeSelect?.(rec.entry.mal_id)}
                           className="shrink-0 w-32 group"
                         >
-                          <div className="relative aspect-[3/4] rounded-lg overflow-hidden mb-2">
+                          <div className="aspect-[3/4] rounded-lg overflow-hidden mb-2">
                             <img
                               src={rec.entry.images.jpg.large_image_url}
                               alt={rec.entry.title}
-                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
                           <p className="text-sm font-medium truncate group-hover:text-primary transition-colors">
                             {rec.entry.title}
@@ -700,7 +651,7 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                         </button>
                       ))}
                     </div>
-                  </motion.div>
+                  </div>
                 )}
               </div>
             </div>
@@ -709,31 +660,25 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
       </ScrollArea>
 
       {/* Image Lightbox */}
-      <AnimatePresence>
-        {selectedImage && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-4"
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-4 animate-in fade-in duration-200"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button
             onClick={() => setSelectedImage(null)}
+            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
           >
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-4 right-4 text-white hover:bg-white/20"
-              onClick={() => setSelectedImage(null)}
-            >
-              <X className="w-6 h-6" />
-            </Button>
-            <img
-              src={selectedImage}
-              alt="Imagem ampliada"
-              className="max-w-full max-h-full object-contain rounded-lg"
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+            <X className="w-6 h-6 text-white" />
+          </button>
+          <img
+            src={selectedImage}
+            alt="Imagem ampliada"
+            className="max-w-full max-h-full object-contain rounded-lg"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+    </div>
   )
 }
