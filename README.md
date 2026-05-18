@@ -1,6 +1,8 @@
 <p align="center">
   <img src="images/Gemini_Generated_Image_ocqhczocqhczocqh.png" alt="AniTracker Banner" width="100%">
 </p>
+
+
 # 🏮 AniTracker Dashboard
 
 > **Status:** Online 🟢  
