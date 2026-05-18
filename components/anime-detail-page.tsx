@@ -138,10 +138,10 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
   }
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-background animate-fade-in">
+    <div className="fixed inset-0 z-50 overflow-hidden bg-background">
       {/* Background blur */}
       <div 
-        className="absolute inset-0 bg-cover bg-center scale-110 blur-3xl opacity-20 animate-fade-in"
+        className="absolute inset-0 bg-cover bg-center scale-110 blur-3xl opacity-20"
         style={{ backgroundImage: `url(${anime.images.jpg.large_image_url})` }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/90 to-background" />
@@ -149,23 +149,23 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
       <ScrollArea className="relative h-full">
         <div className="min-h-screen">
           {/* Header */}
-          <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-md border-b border-border/20 animate-fade-in-down">
+          <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-md border-b border-border/20">
             <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-              <Button variant="ghost" size="sm" onClick={onClose} className="gap-2 text-sm btn-press">
+              <Button variant="ghost" size="sm" onClick={onClose} className="gap-2 text-sm">
                 <ArrowLeft className="w-4 h-4" />
                 Voltar
               </Button>
               <div className="flex items-center gap-1">
-                <Button variant="ghost" size="icon" className="h-8 w-8 btn-press hover:text-red-400 transition-colors">
+                <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-red-400 transition-colors">
                   <Heart className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 btn-press">
+                <Button variant="ghost" size="icon" className="h-8 w-8">
                   <Share2 className="w-4 h-4" />
                 </Button>
                 <Button 
                   variant="outline" 
                   size="sm"
-                  className="gap-1.5 h-8 text-xs ml-1 btn-press"
+                  className="gap-1.5 h-8 text-xs ml-1"
                   onClick={() => window.open(`https://myanimelist.net/anime/${anime.mal_id}`, "_blank")}
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -180,7 +180,7 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
             <img
               src={anime.images.jpg.large_image_url}
               alt={anime.title}
-              className="w-full h-full object-cover animate-fade-in"
+              className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
           </div>
@@ -189,10 +189,10 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
           <div className="max-w-6xl mx-auto px-4 -mt-20 relative z-10">
             <div className="flex flex-col lg:flex-row gap-6">
               {/* Left Sidebar */}
-              <aside className="lg:w-56 shrink-0 animate-fade-in-up">
+              <aside className="lg:w-56 shrink-0">
                 {/* Poster */}
                 <div className="w-40 lg:w-full mx-auto lg:mx-0">
-                  <div className="rounded-xl overflow-hidden shadow-2xl border border-border/30 hover-lift">
+                  <div className="rounded-xl overflow-hidden shadow-2xl border border-border/30">
                     <img
                       src={anime.images.jpg.large_image_url}
                       alt={anime.title}
