@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Star, Calendar, Users, Trophy, Clock, Tv, BookOpen, ExternalLink } from "lucide-react"
+import { Star, Calendar, Users, Trophy, Clock, Tv, BookOpen, ExternalLink, Play, ImageIcon, UsersRound } from "lucide-react"
 import type { AnimeData } from "@/lib/jikan"
 import { Button } from "@/components/ui/button"
 
@@ -11,9 +11,10 @@ interface AnimeDetailModalProps {
   anime: AnimeData | null
   open: boolean
   onClose: () => void
+  onViewFullDetails?: (animeId: number) => void
 }
 
-export function AnimeDetailModal({ anime, open, onClose }: AnimeDetailModalProps) {
+export function AnimeDetailModal({ anime, open, onClose, onViewFullDetails }: AnimeDetailModalProps) {
   if (!anime) return null
 
   const formatNumber = (num: number) => {
@@ -147,8 +148,20 @@ export function AnimeDetailModal({ anime, open, onClose }: AnimeDetailModalProps
               </div>
             )}
 
-            {/* MAL Link */}
-            <div className="mt-4 pt-4 border-t border-border/30">
+            {/* Action Buttons */}
+            <div className="mt-4 pt-4 border-t border-border/30 space-y-2">
+              {onViewFullDetails && (
+                <Button
+                  className="w-full gap-2 bg-primary hover:bg-primary/90"
+                  onClick={() => {
+                    onClose()
+                    onViewFullDetails(anime.mal_id)
+                  }}
+                >
+                  <Play className="w-4 h-4" />
+                  Ver Trailers, Galeria e Mais
+                </Button>
+              )}
               <Button
                 variant="outline"
                 className="w-full gap-2 glass-card border-border/40 hover:border-primary/50"

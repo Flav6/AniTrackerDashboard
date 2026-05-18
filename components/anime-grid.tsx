@@ -2,6 +2,7 @@
 
 import useSWR from "swr"
 import { AnimeCard } from "./anime-card"
+import { AnimeDetailModal } from "./anime-detail-modal"
 import { AnimeDetailPage } from "./anime-detail-page"
 import { Skeleton } from "@/components/ui/skeleton"
 import { fetchTopAnime, fetchSeasonalAnime, fetchUpcomingAnime, type AnimeCategory, type AnimeData } from "@/lib/jikan"
@@ -33,7 +34,8 @@ function deduplicateAnimes(animes: AnimeData[]): AnimeData[] {
 }
 
 export function AnimeGrid({ category, searchQuery }: AnimeGridProps) {
-  const [selectedAnimeId, setSelectedAnimeId] = useState<number | null>(null)
+  const [selectedAnime, setSelectedAnime] = useState<AnimeData | null>(null)
+  const [fullDetailsAnimeId, setFullDetailsAnimeId] = useState<number | null>(null)
   
   const { data: animes, error, isLoading, mutate } = useSWR(
     searchQuery ? null : `anime-${category}`,
@@ -92,16 +94,25 @@ export function AnimeGrid({ category, searchQuery }: AnimeGridProps) {
           <AnimeCard 
             key={`${anime.mal_id}-${index}`} 
             anime={anime} 
-            onClick={() => setSelectedAnimeId(anime.mal_id)}
+            onClick={() => setSelectedAnime(anime)}
           />
         ))}
       </div>
 
-      {selectedAnimeId && (
+      {/* Quick Preview Modal */}
+      <AnimeDetailModal 
+        anime={selectedAnime} 
+        open={!!selectedAnime} 
+        onClose={() => setSelectedAnime(null)}
+        onViewFullDetails={(animeId) => setFullDetailsAnimeId(animeId)}
+      />
+
+      {/* Full Details Page */}
+      {fullDetailsAnimeId && (
         <AnimeDetailPage 
-          animeId={selectedAnimeId}
-          onClose={() => setSelectedAnimeId(null)}
-          onAnimeSelect={(id) => setSelectedAnimeId(id)}
+          animeId={fullDetailsAnimeId}
+          onClose={() => setFullDetailsAnimeId(null)}
+          onAnimeSelect={(id) => setFullDetailsAnimeId(id)}
         />
       )}
     </>

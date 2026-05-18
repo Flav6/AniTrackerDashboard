@@ -463,8 +463,8 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                   <div className="p-4 rounded-xl bg-card/50 backdrop-blur border border-border/30">
                     <h3 className="text-sm font-medium mb-3">Recomendações</h3>
                     <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1">
-                      {recommendations.slice(0, 8).map((rec) => (
-                        <button key={rec.entry.mal_id} onClick={() => onAnimeSelect?.(rec.entry.mal_id)}
+                      {recommendations.slice(0, 8).map((rec, idx) => (
+                        <button key={`${rec.entry.mal_id}-${idx}`} onClick={() => onAnimeSelect?.(rec.entry.mal_id)}
                           className="shrink-0 w-24 group">
                           <div className="aspect-[2/3] rounded-md overflow-hidden mb-1.5">
                             <img src={rec.entry.images.jpg.image_url} alt={rec.entry.title}

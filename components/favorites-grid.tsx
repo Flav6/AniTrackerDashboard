@@ -1,10 +1,11 @@
 "use client"
 
 import useSWR from "swr"
-import { fetchUserFavorites } from "@/lib/jikan"
+import { fetchUserFavorites, fetchAnimeById, type AnimeData } from "@/lib/jikan"
 import { Loader2, Heart, AlertCircle, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import { AnimeDetailModal } from "@/components/anime-detail-modal"
 import { AnimeDetailPage } from "@/components/anime-detail-page"
 
 interface FavoritesGridProps {
@@ -12,7 +13,9 @@ interface FavoritesGridProps {
 }
 
 export function FavoritesGrid({ username }: FavoritesGridProps) {
-  const [selectedAnimeId, setSelectedAnimeId] = useState<number | null>(null)
+  const [selectedAnimeData, setSelectedAnimeData] = useState<AnimeData | null>(null)
+  const [fullDetailsAnimeId, setFullDetailsAnimeId] = useState<number | null>(null)
+  const [loadingDetails, setLoadingDetails] = useState(false)
 
   const { data, error, isLoading, mutate } = useSWR(
     username ? [`user-favorites`, username] : null,
@@ -23,8 +26,16 @@ export function FavoritesGrid({ username }: FavoritesGridProps) {
     }
   )
 
-  const handleAnimeClick = (animeId: number) => {
-    setSelectedAnimeId(animeId)
+  const handleAnimeClick = async (animeId: number) => {
+    setLoadingDetails(true)
+    try {
+      const response = await fetchAnimeById(animeId)
+      setSelectedAnimeData(response.data)
+    } catch (err) {
+      console.error("Error fetching anime details:", err)
+    } finally {
+      setLoadingDetails(false)
+    }
   }
 
   if (isLoading) {
@@ -138,13 +149,34 @@ export function FavoritesGrid({ username }: FavoritesGridProps) {
         ))}
       </div>
 
-      {/* Anime Detail Page */}
-      {selectedAnimeId && (
+      {/* Quick Preview Modal */}
+      <AnimeDetailModal 
+        anime={selectedAnimeData} 
+        open={!!selectedAnimeData} 
+        onClose={() => setSelectedAnimeData(null)}
+        onViewFullDetails={(animeId) => {
+          setSelectedAnimeData(null)
+          setFullDetailsAnimeId(animeId)
+        }}
+      />
+
+      {/* Full Details Page */}
+      {fullDetailsAnimeId && (
         <AnimeDetailPage 
-          animeId={selectedAnimeId}
-          onClose={() => setSelectedAnimeId(null)}
-          onAnimeSelect={(id) => setSelectedAnimeId(id)}
+          animeId={fullDetailsAnimeId}
+          onClose={() => setFullDetailsAnimeId(null)}
+          onAnimeSelect={(id) => setFullDetailsAnimeId(id)}
         />
+      )}
+
+      {/* Loading overlay for details */}
+      {loadingDetails && (
+        <div className="fixed inset-0 bg-background/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="glass-panel p-6 rounded-xl flex items-center gap-3">
+            <Loader2 className="w-5 h-5 animate-spin text-primary" />
+            <span className="text-foreground">Carregando detalhes...</span>
+          </div>
+        </div>
       )}
     </div>
   )
