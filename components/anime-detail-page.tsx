@@ -79,7 +79,10 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
   const pictures = picturesData?.data
   const characters = charactersData?.data
   const staff = staffData?.data
-  const recommendations = recommendationsData?.data
+  // Deduplicate recommendations by mal_id
+  const recommendations = recommendationsData?.data?.filter((rec, index, self) => 
+    self.findIndex(r => r.entry.mal_id === rec.entry.mal_id) === index
+  )
 
   function extractYoutubeId(embedUrl: string | null | undefined): string | null {
     if (!embedUrl) return null

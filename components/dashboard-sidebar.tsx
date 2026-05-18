@@ -52,7 +52,7 @@ export function DashboardSidebar({
   return (
     <aside 
       className={cn(
-        "glass-sidebar h-screen sticky top-0 flex flex-col transition-all duration-300",
+        "glass-sidebar h-screen sticky top-0 flex flex-col transition-[width] duration-150 ease-out",
         collapsed ? "w-20" : "w-72"
       )}
     >
@@ -135,7 +135,7 @@ export function DashboardSidebar({
                 <button
                   onClick={() => onCategoryChange("mylist")}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200",
+                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors duration-100",
                     "hover:bg-sidebar-accent/80",
                     activeCategory === "mylist" 
                       ? "bg-sidebar-accent/90 text-sidebar-primary border border-primary/20" 
@@ -159,7 +159,7 @@ export function DashboardSidebar({
                 <button
                   onClick={() => onCategoryChange("favorites")}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200",
+                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors duration-100",
                     "hover:bg-sidebar-accent/80",
                     activeCategory === "favorites" 
                       ? "bg-sidebar-accent/90 text-sidebar-primary border border-primary/20" 
@@ -197,7 +197,7 @@ export function DashboardSidebar({
               <button
                 onClick={() => onCategoryChange(item.id)}
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200",
+                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors duration-100",
                   "hover:bg-sidebar-accent/80",
                   activeCategory === item.id 
                     ? "bg-sidebar-accent/90 text-sidebar-primary border border-primary/20" 
@@ -229,7 +229,7 @@ export function DashboardSidebar({
               <button
                 onClick={item.id === "theme" ? onThemeClick : undefined}
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200",
+                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors duration-100",
                   "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50",
                   collapsed && "justify-center px-2"
                 )}
