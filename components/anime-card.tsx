@@ -14,16 +14,16 @@ export const AnimeCard = memo(function AnimeCard({ anime, onClick }: AnimeCardPr
   return (
     <div
       onClick={onClick}
-      className="group glass-card rounded-xl overflow-hidden cursor-pointer hover-lift animate-fade-in-up"
+      className="group glass-card rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] hover:border-primary/40"
     >
       {/* Image Container */}
-      <div className="relative aspect-[3/4] overflow-hidden img-zoom">
+      <div className="relative aspect-[3/4] overflow-hidden">
         <img
           src={anime.images.jpg.large_image_url || anime.images.jpg.image_url}
           alt={anime.title}
           loading="lazy"
           decoding="async"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         
         {/* Gradient Overlay */}
