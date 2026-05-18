@@ -37,6 +37,14 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
   const [showFullSynopsis, setShowFullSynopsis] = useState(false)
   const [activeTab, setActiveTab] = useState<"trailer" | "gallery" | "characters">("trailer")
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null)
+
+  // Reset selected video when anime changes
+  useEffect(() => {
+    setSelectedVideoId(null)
+    setActiveTab("trailer")
+    setShowFullSynopsis(false)
+  }, [animeId])
 
   // Fetch anime full details
   const { data: animeData, error: animeError, isLoading: animeLoading } = useSWR(
@@ -87,10 +95,14 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
   const staff = staffData?.data
   const recommendations = recommendationsData?.data
 
-  // Get main trailer
-  const mainTrailer = anime?.trailer?.youtube_id 
-    ? anime.trailer 
-    : videos?.promo?.[0]?.trailer
+  // Get main trailer - check anime.trailer first, then videos.promo
+  const mainTrailerYoutubeId = anime?.trailer?.youtube_id || videos?.promo?.[0]?.trailer?.youtube_id
+  
+  // Get all available promos for additional videos
+  const allPromos = videos?.promo || []
+  
+  // Current video to display (selected or main)
+  const currentVideoId = selectedVideoId || mainTrailerYoutubeId
 
   // Get director/writer from staff
   const director = staff?.find(s => s.positions.some(p => p.toLowerCase().includes("director")))
@@ -522,10 +534,10 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                   {/* Trailer Tab */}
                   {activeTab === "trailer" && (
                     <div className="glass-panel rounded-2xl overflow-hidden">
-                      {mainTrailer?.youtube_id ? (
+                      {currentVideoId ? (
                         <div className="aspect-video">
                           <iframe
-                            src={`https://www.youtube.com/embed/${mainTrailer.youtube_id}?rel=0`}
+                            src={`https://www.youtube.com/embed/${currentVideoId}?rel=0&autoplay=0`}
                             title={`${anime.title} Trailer`}
                             className="w-full h-full"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -542,20 +554,29 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                       )}
 
                       {/* Additional Promos */}
-                      {videos?.promo && videos.promo.length > 1 && (
+                      {allPromos.length > 0 && (
                         <div className="p-4 border-t border-border/30">
                           <p className="text-sm text-muted-foreground mb-3">Mais vídeos</p>
                           <div className="flex gap-3 overflow-x-auto pb-2">
-                            {videos.promo.slice(1, 5).map((promo, idx) => (
+                            {allPromos.map((promo, idx) => (
                               <button
                                 key={idx}
-                                onClick={() => window.open(promo.trailer.url, "_blank")}
-                                className="relative shrink-0 w-40 aspect-video rounded-lg overflow-hidden group"
+                                onClick={() => setSelectedVideoId(promo.trailer.youtube_id)}
+                                className={cn(
+                                  "relative shrink-0 w-40 aspect-video rounded-lg overflow-hidden group border-2 transition-colors",
+                                  currentVideoId === promo.trailer.youtube_id 
+                                    ? "border-primary" 
+                                    : "border-transparent hover:border-primary/50"
+                                )}
                               >
                                 <img
-                                  src={promo.trailer.images.medium_image_url}
+                                  src={promo.trailer.images?.medium_image_url || promo.trailer.images?.image_url || `https://img.youtube.com/vi/${promo.trailer.youtube_id}/mqdefault.jpg`}
                                   alt={promo.title}
                                   className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement
+                                    target.src = `https://img.youtube.com/vi/${promo.trailer.youtube_id}/mqdefault.jpg`
+                                  }}
                                 />
                                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                   <Play className="w-8 h-8 text-white" />
