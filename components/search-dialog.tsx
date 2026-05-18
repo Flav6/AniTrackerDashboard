@@ -101,8 +101,9 @@ export function SearchDialog({ open, onClose }: SearchDialogProps) {
   }, [query])
 
   const handleAnimeClick = useCallback((anime: AnimeData) => {
+    onClose() // Close search dialog first
     setSelectedAnime(anime)
-  }, [])
+  }, [onClose])
 
   const handleCloseDialog = useCallback(() => {
     onClose()
