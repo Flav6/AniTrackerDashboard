@@ -1,8 +1,9 @@
 "use client"
 
 import useSWR from "swr"
+import { AnimatePresence } from "framer-motion"
 import { AnimeCard } from "./anime-card"
-import { AnimeDetailModal } from "./anime-detail-modal"
+import { AnimeDetailPage } from "./anime-detail-page"
 import { Skeleton } from "@/components/ui/skeleton"
 import { fetchTopAnime, fetchSeasonalAnime, fetchUpcomingAnime, type AnimeCategory, type AnimeData } from "@/lib/jikan"
 import { useState } from "react"
@@ -33,7 +34,7 @@ function deduplicateAnimes(animes: AnimeData[]): AnimeData[] {
 }
 
 export function AnimeGrid({ category, searchQuery }: AnimeGridProps) {
-  const [selectedAnime, setSelectedAnime] = useState<AnimeData | null>(null)
+  const [selectedAnimeId, setSelectedAnimeId] = useState<number | null>(null)
   
   const { data: animes, error, isLoading, mutate } = useSWR(
     searchQuery ? null : `anime-${category}`,
@@ -92,16 +93,20 @@ export function AnimeGrid({ category, searchQuery }: AnimeGridProps) {
           <AnimeCard 
             key={`${anime.mal_id}-${index}`} 
             anime={anime} 
-            onClick={() => setSelectedAnime(anime)}
+            onClick={() => setSelectedAnimeId(anime.mal_id)}
           />
         ))}
       </div>
 
-      <AnimeDetailModal 
-        anime={selectedAnime} 
-        open={!!selectedAnime} 
-        onClose={() => setSelectedAnime(null)} 
-      />
+      <AnimatePresence>
+        {selectedAnimeId && (
+          <AnimeDetailPage 
+            animeId={selectedAnimeId}
+            onClose={() => setSelectedAnimeId(null)}
+            onAnimeSelect={(id) => setSelectedAnimeId(id)}
+          />
+        )}
+      </AnimatePresence>
     </>
   )
 }

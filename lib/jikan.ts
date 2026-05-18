@@ -112,6 +112,173 @@ export async function fetchAnimeById(id: number): Promise<JikanResponse<AnimeDat
   return res.json()
 }
 
+// Fetch anime full details (includes relations, themes, etc.)
+export async function fetchAnimeFullById(id: number): Promise<JikanResponse<AnimeData & {
+  trailer: {
+    youtube_id: string | null
+    url: string | null
+    embed_url: string | null
+  }
+  studios: Array<{ mal_id: number; name: string }>
+  producers: Array<{ mal_id: number; name: string }>
+  licensors: Array<{ mal_id: number; name: string }>
+  themes: Array<{ mal_id: number; name: string }>
+  demographics: Array<{ mal_id: number; name: string }>
+  relations: Array<{
+    relation: string
+    entry: Array<{ mal_id: number; type: string; name: string; url: string }>
+  }>
+  theme: {
+    openings: string[]
+    endings: string[]
+  }
+  external: Array<{ name: string; url: string }>
+  streaming: Array<{ name: string; url: string }>
+}>> {
+  const res = await rateLimitedFetch(`${JIKAN_BASE_URL}/anime/${id}/full`)
+  if (!res.ok) throw new Error("Falha ao buscar detalhes completos do anime")
+  return res.json()
+}
+
+// Fetch anime videos (trailers, promos, etc.)
+export interface AnimeVideo {
+  promo: Array<{
+    title: string
+    trailer: {
+      youtube_id: string
+      url: string
+      embed_url: string
+      images: {
+        image_url: string
+        small_image_url: string
+        medium_image_url: string
+        large_image_url: string
+        maximum_image_url: string
+      }
+    }
+  }>
+  episodes: Array<{
+    mal_id: number
+    title: string
+    episode: string
+    url: string
+    images: {
+      jpg: { image_url: string }
+    }
+  }>
+  music_videos: Array<{
+    title: string
+    video: {
+      youtube_id: string
+      url: string
+      embed_url: string
+      images: {
+        image_url: string
+        small_image_url: string
+        medium_image_url: string
+        large_image_url: string
+        maximum_image_url: string
+      }
+    }
+    meta: {
+      title: string
+      author: string
+    }
+  }>
+}
+
+export async function fetchAnimeVideos(id: number): Promise<JikanResponse<AnimeVideo>> {
+  const res = await rateLimitedFetch(`${JIKAN_BASE_URL}/anime/${id}/videos`)
+  if (!res.ok) throw new Error("Falha ao buscar vídeos do anime")
+  return res.json()
+}
+
+// Fetch anime pictures
+export interface AnimePicture {
+  jpg: {
+    image_url: string
+    small_image_url: string
+    large_image_url: string
+  }
+  webp: {
+    image_url: string
+    small_image_url: string
+    large_image_url: string
+  }
+}
+
+export async function fetchAnimePictures(id: number): Promise<JikanResponse<AnimePicture[]>> {
+  const res = await rateLimitedFetch(`${JIKAN_BASE_URL}/anime/${id}/pictures`)
+  if (!res.ok) throw new Error("Falha ao buscar imagens do anime")
+  return res.json()
+}
+
+// Fetch anime characters
+export interface AnimeCharacter {
+  character: {
+    mal_id: number
+    url: string
+    images: {
+      jpg: { image_url: string }
+      webp: { image_url: string; small_image_url: string }
+    }
+    name: string
+  }
+  role: string
+  voice_actors: Array<{
+    person: {
+      mal_id: number
+      url: string
+      images: { jpg: { image_url: string } }
+      name: string
+    }
+    language: string
+  }>
+}
+
+export async function fetchAnimeCharacters(id: number): Promise<JikanResponse<AnimeCharacter[]>> {
+  const res = await rateLimitedFetch(`${JIKAN_BASE_URL}/anime/${id}/characters`)
+  if (!res.ok) throw new Error("Falha ao buscar personagens do anime")
+  return res.json()
+}
+
+// Fetch anime staff
+export interface AnimeStaff {
+  person: {
+    mal_id: number
+    url: string
+    images: { jpg: { image_url: string } }
+    name: string
+  }
+  positions: string[]
+}
+
+export async function fetchAnimeStaff(id: number): Promise<JikanResponse<AnimeStaff[]>> {
+  const res = await rateLimitedFetch(`${JIKAN_BASE_URL}/anime/${id}/staff`)
+  if (!res.ok) throw new Error("Falha ao buscar equipe do anime")
+  return res.json()
+}
+
+// Fetch anime recommendations
+export interface AnimeRecommendation {
+  entry: {
+    mal_id: number
+    url: string
+    images: {
+      jpg: { image_url: string; large_image_url: string }
+      webp: { image_url: string; large_image_url: string }
+    }
+    title: string
+  }
+  votes: number
+}
+
+export async function fetchAnimeRecommendations(id: number): Promise<JikanResponse<AnimeRecommendation[]>> {
+  const res = await rateLimitedFetch(`${JIKAN_BASE_URL}/anime/${id}/recommendations`)
+  if (!res.ok) throw new Error("Falha ao buscar recomendações")
+  return res.json()
+}
+
 export type AnimeCategory = "top" | "seasonal" | "upcoming" | "mylist" | "favorites"
 
 export interface UserAnimeListEntry {
