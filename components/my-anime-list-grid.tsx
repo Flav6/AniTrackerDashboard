@@ -311,7 +311,7 @@ function AnimeListCard({ item, onClick }: { item: UserAnimeListEntry; onClick: (
         >
           <div className="flex gap-3 p-3">
             {/* Image */}
-            <div className="relative w-20 h-28 rounded-lg overflow-hidden shrink-0">
+            <div className="relative w-16 h-24 rounded-lg overflow-hidden shrink-0">
               <img
                 src={entry.images.jpg.image_url}
                 alt={entry.title}

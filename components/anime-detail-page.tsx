@@ -196,7 +196,7 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                     <img
                       src={anime.images.jpg.large_image_url}
                       alt={anime.title}
-                      className="w-full aspect-[2/3] object-cover"
+                      className="w-full aspect-[3/4] object-cover"
                     />
                   </div>
                 </div>
@@ -418,7 +418,7 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                         {pictures && pictures.length > 0 ? (
                           pictures.slice(0, 10).map((pic, idx) => (
                             <button key={idx} onClick={() => setSelectedImage(pic.jpg.large_image_url)}
-                              className="aspect-[2/3] rounded-md overflow-hidden hover:ring-2 hover:ring-primary/50 transition-all">
+                              className="aspect-[3/4] rounded-md overflow-hidden hover:ring-2 hover:ring-primary/50 transition-all">
                               <img src={pic.jpg.image_url} alt={`${anime.title} ${idx + 1}`}
                                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                             </button>
@@ -469,7 +469,7 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                       {recommendations.slice(0, 8).map((rec, idx) => (
                         <button key={`${rec.entry.mal_id}-${idx}`} onClick={() => onAnimeSelect?.(rec.entry.mal_id)}
                           className="shrink-0 w-24 group">
-                          <div className="aspect-[2/3] rounded-md overflow-hidden mb-1.5">
+                          <div className="aspect-[3/4] rounded-md overflow-hidden mb-1.5">
                             <img src={rec.entry.images.jpg.image_url} alt={rec.entry.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                           </div>
