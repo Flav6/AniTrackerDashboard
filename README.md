@@ -1,6 +1,5 @@
 <p align="center">
-  <img src="<img width="1910" height="721" alt="{2E0607FF-007E-495F-9D78-F4F12C2A6922}" src="https://github.com/user-attachments/assets/1f263755-266d-4c69-9257-a2ae6475f987" />
-" alt="Banner do Meu Projeto" width="100%">
+  <img src="<img width="1910" height="721" alt="{2E0607FF-007E-495F-9D78-F4F12C2A6922}" src="https://github.com/user-attachments/assets/1f263755-266d-4c69-9257-a2ae6475f987" /> width="100%">
 </p>
 
 
