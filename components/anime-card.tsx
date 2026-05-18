@@ -14,16 +14,16 @@ export const AnimeCard = memo(function AnimeCard({ anime, onClick }: AnimeCardPr
   return (
     <div
       onClick={onClick}
-      className="group glass-card rounded-xl overflow-hidden cursor-pointer transition-transform duration-200 hover:scale-[1.02] hover:shadow-[0_12px_40px_oklch(0.35_0.12_350_/_0.5)]"
+      className="group glass-card rounded-xl overflow-hidden cursor-pointer hover-lift animate-fade-in-up"
     >
       {/* Image Container */}
-      <div className="relative aspect-[3/4] overflow-hidden">
+      <div className="relative aspect-[3/4] overflow-hidden img-zoom">
         <img
           src={anime.images.jpg.large_image_url || anime.images.jpg.image_url}
           alt={anime.title}
           loading="lazy"
           decoding="async"
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-full object-cover"
         />
         
         {/* Gradient Overlay */}
@@ -31,7 +31,7 @@ export const AnimeCard = memo(function AnimeCard({ anime, onClick }: AnimeCardPr
         
         {/* Score Badge */}
         {anime.score && (
-          <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/95 backdrop-blur-md text-primary-foreground text-sm font-semibold shadow-lg shadow-primary/30">
+          <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/95 backdrop-blur-md text-primary-foreground text-sm font-semibold shadow-lg shadow-primary/30 transition-transform duration-200 group-hover:scale-110">
             <Star className="w-3.5 h-3.5 fill-current" />
             {anime.score.toFixed(1)}
           </div>

@@ -25,14 +25,14 @@ export function AnimeDetailModal({ anime, open, onClose, onViewFullDetails }: An
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl p-0 overflow-hidden glass-panel border-border/40">
+      <DialogContent className="max-w-3xl p-0 overflow-hidden glass-panel border-border/40 modal-enter">
         <DialogTitle className="sr-only">{anime.title_english || anime.title}</DialogTitle>
         <DialogDescription className="sr-only">
           Detalhes do anime {anime.title_english || anime.title}
         </DialogDescription>
         <div className="flex flex-col md:flex-row">
           {/* Image Section */}
-          <div className="relative w-full md:w-1/3 aspect-[3/4] md:aspect-auto shrink-0">
+          <div className="relative w-full md:w-1/3 aspect-[3/4] md:aspect-auto shrink-0 img-zoom">
             <img
               src={anime.images.jpg.large_image_url || anime.images.jpg.image_url}
               alt={anime.title}
@@ -63,28 +63,28 @@ export function AnimeDetailModal({ anime, open, onClose, onViewFullDetails }: An
             {/* Stats Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
               {anime.rank && (
-                <div className="glass-card rounded-lg p-2.5 text-center">
+                <div className="glass-card rounded-lg p-2.5 text-center hover-lift animate-fade-in" style={{ animationDelay: '50ms' }}>
                   <Trophy className="w-4 h-4 mx-auto mb-1 text-primary" />
                   <p className="text-xs text-muted-foreground">Rank</p>
                   <p className="text-sm font-semibold text-foreground">#{anime.rank}</p>
                 </div>
               )}
               {anime.popularity && (
-                <div className="glass-card rounded-lg p-2.5 text-center">
+                <div className="glass-card rounded-lg p-2.5 text-center hover-lift animate-fade-in" style={{ animationDelay: '100ms' }}>
                   <Users className="w-4 h-4 mx-auto mb-1 text-primary" />
                   <p className="text-xs text-muted-foreground">Popularidade</p>
                   <p className="text-sm font-semibold text-foreground">#{anime.popularity}</p>
                 </div>
               )}
               {anime.members && (
-                <div className="glass-card rounded-lg p-2.5 text-center">
+                <div className="glass-card rounded-lg p-2.5 text-center hover-lift animate-fade-in" style={{ animationDelay: '150ms' }}>
                   <Users className="w-4 h-4 mx-auto mb-1 text-primary" />
                   <p className="text-xs text-muted-foreground">Membros</p>
                   <p className="text-sm font-semibold text-foreground">{formatNumber(anime.members)}</p>
                 </div>
               )}
               {anime.episodes && (
-                <div className="glass-card rounded-lg p-2.5 text-center">
+                <div className="glass-card rounded-lg p-2.5 text-center hover-lift animate-fade-in" style={{ animationDelay: '200ms' }}>
                   <Tv className="w-4 h-4 mx-auto mb-1 text-primary" />
                   <p className="text-xs text-muted-foreground">Episódios</p>
                   <p className="text-sm font-semibold text-foreground">{anime.episodes}</p>
@@ -152,7 +152,7 @@ export function AnimeDetailModal({ anime, open, onClose, onViewFullDetails }: An
             <div className="mt-4 pt-4 border-t border-border/30 space-y-2">
               {onViewFullDetails && (
                 <Button
-                  className="w-full gap-2 bg-primary hover:bg-primary/90"
+                  className="w-full gap-2 bg-primary hover:bg-primary/90 btn-press"
                   onClick={() => {
                     onClose()
                     onViewFullDetails(anime.mal_id)
@@ -164,7 +164,7 @@ export function AnimeDetailModal({ anime, open, onClose, onViewFullDetails }: An
               )}
               <Button
                 variant="outline"
-                className="w-full gap-2 glass-card border-border/40 hover:border-primary/50"
+                className="w-full gap-2 glass-card border-border/40 hover:border-primary/50 btn-press"
                 onClick={() => window.open(`https://myanimelist.net/anime/${anime.mal_id}`, "_blank")}
               >
                 <ExternalLink className="w-4 h-4" />

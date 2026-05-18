@@ -59,11 +59,11 @@ export function DashboardSidebar({
       {/* Logo */}
       <div className="p-6 border-b border-sidebar-border/40">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/30 backdrop-blur-sm flex items-center justify-center shrink-0 border border-primary/20 shadow-lg shadow-primary/20">
-            <Flame className="w-5 h-5 text-primary" />
+          <div className="w-10 h-10 rounded-xl bg-primary/30 backdrop-blur-sm flex items-center justify-center shrink-0 border border-primary/20 shadow-lg shadow-primary/20 hover:scale-105 transition-transform duration-200">
+            <Flame className="w-5 h-5 text-primary animate-pulse" />
           </div>
           {!collapsed && (
-            <div>
+            <div className="animate-fade-in">
               <h1 className="font-bold text-lg text-sidebar-foreground">AniTracker</h1>
               <p className="text-xs text-muted-foreground">Sua lista de animes</p>
             </div>

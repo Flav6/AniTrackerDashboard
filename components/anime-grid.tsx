@@ -50,8 +50,8 @@ export function AnimeGrid({ category, searchQuery }: AnimeGridProps) {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
         {Array.from({ length: 12 }).map((_, i) => (
-          <div key={i} className="glass-card rounded-xl overflow-hidden">
-            <Skeleton className="aspect-[3/4] bg-muted/30" />
+          <div key={i} className="glass-card rounded-xl overflow-hidden animate-fade-in" style={{ animationDelay: `${i * 50}ms` }}>
+            <div className="aspect-[3/4] skeleton-pulse" />
           </div>
         ))}
       </div>
@@ -91,11 +91,12 @@ export function AnimeGrid({ category, searchQuery }: AnimeGridProps) {
     <>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
         {uniqueAnimes.map((anime, index) => (
-          <AnimeCard 
-            key={`${anime.mal_id}-${index}`} 
-            anime={anime} 
-            onClick={() => setSelectedAnime(anime)}
-          />
+          <div key={`${anime.mal_id}-${index}`} style={{ animationDelay: `${Math.min(index * 30, 300)}ms` }} className="opacity-0 animate-fade-in-up">
+            <AnimeCard 
+              anime={anime} 
+              onClick={() => setSelectedAnime(anime)}
+            />
+          </div>
         ))}
       </div>
 
