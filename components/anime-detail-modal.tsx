@@ -32,10 +32,12 @@ export function AnimeDetailModal({ anime, open, onClose, onViewFullDetails }: An
         </DialogDescription>
         <div className="flex flex-col md:flex-row">
           {/* Image Section */}
-          <div className="relative w-full md:w-1/3 aspect-[3/4] md:aspect-auto shrink-0 img-zoom">
+          <div className="relative w-full md:w-1/3 aspect-[3/4] md:aspect-auto shrink-0">
             <img
-              src={anime.images.jpg.large_image_url || anime.images.jpg.image_url}
+              src={anime.images.jpg.image_url}
               alt={anime.title}
+              loading="eager"
+              decoding="async"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent md:bg-gradient-to-r md:from-background md:via-background/30 md:to-transparent" />

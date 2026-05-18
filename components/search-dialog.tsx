@@ -30,6 +30,7 @@ const SearchResultCard = memo(function SearchResultCard({
         src={anime.images.jpg.image_url}
         alt={anime.title}
         loading="lazy"
+        decoding="async"
         className="w-12 h-16 object-cover rounded shrink-0"
       />
       <div className="flex-1 min-w-0">

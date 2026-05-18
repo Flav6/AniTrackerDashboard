@@ -180,6 +180,8 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
             <img
               src={anime.images.jpg.large_image_url}
               alt={anime.title}
+              loading="eager"
+              decoding="async"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
@@ -196,6 +198,8 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                     <img
                       src={anime.images.jpg.large_image_url}
                       alt={anime.title}
+                      loading="eager"
+                      decoding="async"
                       className="w-full aspect-[3/4] object-cover"
                     />
                   </div>
@@ -400,7 +404,7 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                                       : "border-transparent hover:border-primary/40"
                                   )}>
                                   <img src={`https://img.youtube.com/vi/${promo.extractedYoutubeId}/mqdefault.jpg`}
-                                    alt={promo.title} className="w-full h-full object-cover" />
+                                    alt={promo.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                                     <Play className="w-6 h-6 text-white" />
                                   </div>
@@ -420,6 +424,7 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                             <button key={idx} onClick={() => setSelectedImage(pic.jpg.large_image_url)}
                               className="aspect-[3/4] rounded-md overflow-hidden hover:ring-2 hover:ring-primary/50 transition-all">
                               <img src={pic.jpg.image_url} alt={`${anime.title} ${idx + 1}`}
+                                loading="lazy" decoding="async"
                                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                             </button>
                           ))
@@ -439,14 +444,14 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                           japaneseVAs.map((item, idx) => (
                             <div key={idx} className="flex items-center gap-3 p-2 rounded-lg bg-muted/10 hover:bg-muted/20 transition-colors">
                               <img src={item.character.images.jpg.image_url} alt={item.character.name}
-                                className="w-12 h-12 rounded-lg object-cover" />
+                                loading="lazy" decoding="async" className="w-12 h-12 rounded-lg object-cover" />
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium truncate">{item.character.name}</p>
                                 <p className="text-xs text-muted-foreground truncate">CV: {item.voiceActor?.person.name}</p>
                               </div>
                               {item.voiceActor && (
                                 <img src={item.voiceActor.person.images.jpg.image_url} alt={item.voiceActor.person.name}
-                                  className="w-9 h-9 rounded-full object-cover" />
+                                  loading="lazy" decoding="async" className="w-9 h-9 rounded-full object-cover" />
                               )}
                             </div>
                           ))
@@ -471,6 +476,7 @@ export function AnimeDetailPage({ animeId, onClose, onAnimeSelect }: AnimeDetail
                           className="shrink-0 w-24 group">
                           <div className="aspect-[3/4] rounded-md overflow-hidden mb-1.5">
                             <img src={rec.entry.images.jpg.image_url} alt={rec.entry.title}
+                              loading="lazy" decoding="async"
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                           </div>
                           <p className="text-xs font-medium truncate group-hover:text-primary transition-colors">

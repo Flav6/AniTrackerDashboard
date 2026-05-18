@@ -32,6 +32,8 @@ export function UserProfileCard({ profile, onDisconnect }: UserProfileCardProps)
           <img 
             src={profile.images.jpg.image_url} 
             alt={profile.username}
+            loading="lazy"
+            decoding="async"
             className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/50"
           />
         ) : (
