@@ -7,6 +7,7 @@ import { Search, Loader2 } from "lucide-react"
 import { searchAnime, type AnimeData } from "@/lib/jikan"
 import { AnimeCard } from "./anime-card"
 import { AnimeDetailModal } from "./anime-detail-modal"
+import { AnimeDetailPage } from "./anime-detail-page"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface SearchDialogProps {
@@ -19,6 +20,7 @@ export function SearchDialog({ open, onClose }: SearchDialogProps) {
   const [results, setResults] = useState<AnimeData[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [selectedAnime, setSelectedAnime] = useState<AnimeData | null>(null)
+  const [fullDetailsAnimeId, setFullDetailsAnimeId] = useState<number | null>(null)
 
   useEffect(() => {
     if (!query.trim()) {
@@ -76,9 +78,9 @@ export function SearchDialog({ open, onClose }: SearchDialogProps) {
           <ScrollArea className="flex-1 p-4">
             {results.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                {results.map((anime) => (
+                {results.map((anime, idx) => (
                   <AnimeCard 
-                    key={anime.mal_id} 
+                    key={`${anime.mal_id}-${idx}`} 
                     anime={anime} 
                     onClick={() => handleAnimeClick(anime)}
                   />
@@ -106,8 +108,21 @@ export function SearchDialog({ open, onClose }: SearchDialogProps) {
       <AnimeDetailModal 
         anime={selectedAnime} 
         open={!!selectedAnime} 
-        onClose={() => setSelectedAnime(null)} 
+        onClose={() => setSelectedAnime(null)}
+        onViewFullDetails={(animeId) => {
+          setSelectedAnime(null)
+          setFullDetailsAnimeId(animeId)
+        }}
       />
+
+      {/* Full Details Page */}
+      {fullDetailsAnimeId && (
+        <AnimeDetailPage 
+          animeId={fullDetailsAnimeId}
+          onClose={() => setFullDetailsAnimeId(null)}
+          onAnimeSelect={(id) => setFullDetailsAnimeId(id)}
+        />
+      )}
     </>
   )
 }

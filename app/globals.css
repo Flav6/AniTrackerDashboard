@@ -235,3 +235,71 @@
   width: 0;
   height: 0;
 }
+
+/* Performance optimizations for animations */
+.glass,
+.glass-card,
+.glass-sidebar,
+.glass-panel {
+  will-change: auto;
+  transform: translateZ(0);
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Optimize transitions - use GPU acceleration */
+img,
+video,
+iframe {
+  content-visibility: auto;
+}
+
+/* Smooth transitions for interactive elements */
+button,
+a,
+input,
+select,
+textarea {
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Optimize image loading */
+img {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Prevent layout shifts */
+[data-radix-dialog-content],
+[data-radix-popover-content] {
+  transform: translateZ(0);
+}
+
+/* Optimize scroll containers */
+.overflow-y-auto,
+.overflow-x-auto,
+.overflow-auto {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Disable scroll behavior for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .overflow-y-auto,
+  .overflow-x-auto,
+  .overflow-auto {
+    scroll-behavior: auto;
+  }
+}

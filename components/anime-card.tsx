@@ -1,5 +1,6 @@
 "use client"
 
+import { memo } from "react"
 import { Star, Calendar, Tv } from "lucide-react"
 import type { AnimeData } from "@/lib/jikan"
 import { Badge } from "@/components/ui/badge"
@@ -9,18 +10,20 @@ interface AnimeCardProps {
   onClick?: () => void
 }
 
-export function AnimeCard({ anime, onClick }: AnimeCardProps) {
+export const AnimeCard = memo(function AnimeCard({ anime, onClick }: AnimeCardProps) {
   return (
     <div
       onClick={onClick}
-      className="group glass-card rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_12px_40px_oklch(0.35_0.12_350_/_0.5)] hover:border-primary/30"
+      className="group glass-card rounded-xl overflow-hidden cursor-pointer transition-transform duration-200 hover:scale-[1.02] hover:shadow-[0_12px_40px_oklch(0.35_0.12_350_/_0.5)]"
     >
       {/* Image Container */}
       <div className="relative aspect-[3/4] overflow-hidden">
         <img
           src={anime.images.jpg.large_image_url || anime.images.jpg.image_url}
           alt={anime.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
         
         {/* Gradient Overlay */}
@@ -70,4 +73,4 @@ export function AnimeCard({ anime, onClick }: AnimeCardProps) {
       </div>
     </div>
   )
-}
+})
