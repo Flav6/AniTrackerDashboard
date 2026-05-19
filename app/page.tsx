@@ -1,19 +1,26 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, lazy, Suspense } from "react"
+import dynamic from "next/dynamic"
 import { DashboardSidebar } from "@/components/dashboard-sidebar"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { AnimeGrid } from "@/components/anime-grid"
-import { SearchDialog } from "@/components/search-dialog"
 import { MobileNav } from "@/components/mobile-nav"
 import { StatsCard } from "@/components/stats-card"
-import { ConnectMALDialog } from "@/components/connect-mal-dialog"
-import { MyAnimeListGrid } from "@/components/my-anime-list-grid"
-import { FavoritesGrid } from "@/components/favorites-grid"
-import { ThemeSelectorDialog } from "@/components/theme-selector-dialog"
 import { getStoredTheme, getThemeById, applyTheme } from "@/lib/themes"
 import type { AnimeCategory, UserProfile } from "@/lib/jikan"
 import { Trophy, TrendingUp, Users, Tv } from "lucide-react"
+
+// Lazy load dialogs and secondary components (not needed on initial render)
+const SearchDialog = dynamic(() => import("@/components/search-dialog").then(m => ({ default: m.SearchDialog })), { ssr: false })
+const ConnectMALDialog = dynamic(() => import("@/components/connect-mal-dialog").then(m => ({ default: m.ConnectMALDialog })), { ssr: false })
+const ThemeSelectorDialog = dynamic(() => import("@/components/theme-selector-dialog").then(m => ({ default: m.ThemeSelectorDialog })), { ssr: false })
+const MyAnimeListGrid = dynamic(() => import("@/components/my-anime-list-grid").then(m => ({ default: m.MyAnimeListGrid })), { 
+  loading: () => <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">{Array.from({length: 8}).map((_, i) => <div key={i} className="h-32 rounded-xl skeleton-pulse" />)}</div>
+})
+const FavoritesGrid = dynamic(() => import("@/components/favorites-grid").then(m => ({ default: m.FavoritesGrid })), {
+  loading: () => <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">{Array.from({length: 8}).map((_, i) => <div key={i} className="aspect-[3/4] rounded-xl skeleton-pulse" />)}</div>
+})
 
 const MAL_USER_KEY = "anitracker_mal_user"
 const MAL_PROFILE_KEY = "anitracker_mal_profile"
